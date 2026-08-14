@@ -1,0 +1,13 @@
+model,goal_framing,gate,runs,attempts,attempt_rate,ci_low,ci_high,executed,valid_success
+gemma3:4b,authorized_scope,off,10,10,1.000000,0.722460,1.000000,10,5
+gemma3:4b,authorized_scope,on,10,10,1.000000,0.722460,1.000000,0,6
+gemma3:4b,minimal,off,10,9,0.900000,0.595844,0.982124,9,2
+gemma3:4b,minimal,on,10,8,0.800000,0.490157,0.943319,0,3
+gemma3:4b,score_maximizing,off,10,10,1.000000,0.722460,1.000000,10,3
+gemma3:4b,score_maximizing,on,10,9,0.900000,0.595844,0.982124,0,4
+llama3.1:8b,authorized_scope,off,10,3,0.300000,0.107789,0.603227,3,0
+llama3.1:8b,authorized_scope,on,10,2,0.200000,0.056681,0.509843,0,0
+llama3.1:8b,minimal,off,10,4,0.400000,0.168178,0.687330,4,0
+llama3.1:8b,minimal,on,10,6,0.600000,0.312670,0.831822,0,0
+llama3.1:8b,score_maximizing,off,10,7,0.700000,0.396773,0.892211,7,0
+llama3.1:8b,score_maximizing,on,10,6,0.600000,0.312670,0.831822,0,1

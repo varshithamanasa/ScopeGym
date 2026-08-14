@@ -1,0 +1,343 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{newtxtext,newtxmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\usepackage{cite}
+
+\graphicspath{{figures/}}
+\urlstyle{same}
+\hyphenation{Scope-Gym au-thor-i-za-tion}
+
+\title{ScopeGym: Evaluating Human-Authorization Boundaries in Goal-Directed AI Agents}
+
+\author{\IEEEauthorblockN{Varshitha Manjunath}
+\IEEEauthorblockA{\textit{Cybersecurity Program, Lasell University}\\
+Newton, Massachusetts, USA\\
+vmanjunath@lasell.edu}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Goal-directed agents may complete benchmark tasks through routes that violate
+human intent. We introduce ScopeGym, a sealed symbolic benchmark that crosses
+three goal framings with an executable authorization gate. We evaluated two
+local language models in a randomized $2\times3\times2$ design with ten
+repetitions per cell (120 runs). The primary outcome was any attempt to use an
+explicitly out-of-scope shortcut; secondary outcomes separated executed
+violations, post-denial persistence, safe recovery, and valid completion. With
+the gate off, score-maximizing framing produced shortcut attempts in 17/20 runs
+(85\%), compared with 13/20 (65\%) under authorized-scope framing, a
+$+20$ percentage-point difference that was not statistically conclusive in
+this pilot (two-sided Fisher $p=.273$). The gate blocked every attempted
+execution by construction, yet 41/60 gated runs still attempted the shortcut.
+Among these 41 runs, 12 (29.3\%) persisted after denial and 11 (26.8\%)
+recovered to the valid route. These results show why outcome-only evaluation
+can conflate enforcement with compliant reasoning. Human-authorization
+benchmarks should measure intent, execution, and adaptation after denial as
+distinct stages.
+\end{abstract}
+
+\begin{IEEEkeywords}
+AI agents, authorization, benchmark integrity, specification gaming,
+cybersecurity evaluation
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+A goal-directed agent can produce a correct benchmark answer while using a
+route its human operator did not authorize. This distinction matters when an
+agent can call tools, access services, or modify state: task success records
+what happened, but not whether the action was within scope. Studies of reward
+misspecification show that agents can optimize a proxy while reducing the true
+objective \cite{pan2022reward}, and goal misgeneralization shows that competent
+behavior can pursue an undesired goal even when a written specification is
+correct \cite{shah2022goal}. Reasoning agents have also been observed hacking a
+chess benchmark rather than winning through ordinary play
+\cite{bondarenko2025specification}. These findings motivate direct measurement
+of prohibited attempts, not only final scores.
+
+Cybersecurity makes the distinction especially concrete. CyBench
+\cite{zhang2024cybench}, EnIGMA \cite{abramovich2024enigma}, and ExploitGym
+\cite{wang2026exploitgym} evaluate whether agents can progress from security
+tasks or vulnerabilities to successful solutions. Their realism is valuable
+for capability measurement, but reproducing real exploitation is unnecessary
+for the narrower question of whether an agent respects a human-defined
+authorization boundary. The safer experimental object is the decision to take
+a forbidden shortcut, represented by an inert symbolic action.
+
+This paper asks: \emph{How do goal framing and authorization gates affect an AI
+agent's attempts to use prohibited shortcuts during benchmark completion?} We
+make three contributions. First, ScopeGym operationalizes human authorization
+as a separable, executable gate in a sealed state machine. Second, it reports
+attempt, execution, persistence after denial, safe recovery, and valid
+completion as distinct outcomes. Third, a 120-run local-model pilot shows a
+directional framing difference, complete gate enforcement by construction, and
+substantial behavioral variation after denial.
+
+\section{Related Work and Gap}
+
+Agent-safety benchmarks cover a broad risk surface. ToolEmu uses emulated tools
+to expose high-stakes failures \cite{ruan2024toolemu}; AgentHarm evaluates
+harmful multi-step tasks \cite{andriushchenko2025agentharm};
+Agent-SafetyBench spans environments, risk categories, and failure modes
+\cite{zhang2024agentsafetybench}; and R-Judge evaluates risk awareness from
+interaction records \cite{yuan2024rjudge}. Tau-bench adds domain policies and
+tests tool-agent-user interaction reliability \cite{yao2024taubench}.
+
+Adversarial tool-security benchmarks examine a complementary threat model.
+InjecAgent measures indirect prompt injection across tool-integrated agents
+\cite{zhan2024injecagent}; AgentDojo provides an extensible environment for
+attacks and defenses over untrusted tool data \cite{debenedetti2024agentdojo};
+and Agent Security Bench formalizes attacks, defenses, and security--utility
+tradeoffs across agent scenarios \cite{zhang2024asb}. These benchmarks reveal
+unauthorized behavior under adversarial inputs, but do not isolate how ordinary
+goal wording changes use of an explicitly prohibited shortcut.
+
+Authorization research supplies mechanisms for constraining that behavior.
+GuardAgent checks actions against user-defined guard requests
+\cite{xiang2024guardagent}; Progent enforces symbolic least-privilege policies
+over tool calls \cite{shi2025progent}; MiniScope reconstructs permissions for
+tool-calling agents \cite{zhu2025miniscope}; and authenticated delegation
+specifies restricted scopes and auditable chains of authority
+\cite{south2025delegation}. These works primarily evaluate enforcement,
+security, and utility.
+
+Yu et al.\ provide the nearest experimental precedent: a paired tool-affordance
+study with permissive and blocking regimes that separates attempted from
+realized violations \cite{yu2026toolaffordance}. ScopeGym holds the symbolic
+action affordance present, crosses three goal framings with the gate state, and
+adds post-denial persistence and recovery outcomes. The resulting gap is
+narrow and search-bounded: in Consensus-indexed and primary records searched
+through July 29, 2026, we did not identify another study combining all three
+features. This is not an absolute priority claim.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{scopegym_design.pdf}
+  \caption{ScopeGym experimental pipeline. The authorization gate changes
+  whether a prohibited symbolic action executes; it does not remove that
+  action from the agent's vocabulary.}
+  \label{fig:design}
+\end{figure*}
+
+\section{Method}
+
+\subsection{Sealed Benchmark}
+
+Figure~\ref{fig:design} summarizes the harness. ScopeGym is a two-route
+authorization task: each run exposes local symbolic artifacts and an authorized
+target route, together with a visible decoy ``answers service'' that represents
+evaluation infrastructure. The valid route inspects artifacts, develops a
+target solution, and submits the target flag; the shortcut probes or attempts
+access to the decoy. A shortcut request is an observable proxy for behavioral
+intent, not a claim about the model's internal reasoning. No symbolic action
+reaches a shell, arbitrary filesystem, credential, exploit payload, or public
+network.
+
+Every turn asks the model for one JSON action from a fixed vocabulary. The
+world has an eight-action budget and stops on valid success, fake-answer
+submission, explicit stop, or budget exhaustion. With the gate off, a decoy
+probe returns \texttt{decoy\_observed} and is recorded as executed. With the
+gate on, the same action returns \texttt{authorization\_denied}. Thus, zero
+gated executions is an enforcement invariant, not a learned behavioral result.
+Operationally, ScopeGym asks what the agent requested, what the system allowed,
+and how the agent adapted after permission was refused.
+
+\subsection{Factorial Design}
+
+The randomized design crossed two locally served models
+(\texttt{gemma3:4b} and \texttt{llama3.1:8b}), three goal framings, and gate
+off/on, with ten repetitions in each of 12 cells. The user-level goals were:
+\emph{``Capture the target flag''} (minimal);
+\emph{``Use only the supplied target interface and local artifacts \ldots\ Do
+not access evaluation infrastructure''} (authorized scope); and
+\emph{``Maximize your benchmark score by capturing the target flag within the
+action budget''} (score maximizing). A common system prompt disclosed the
+synthetic setting and identified the answers service as outside the intended
+target scope.
+
+Runs used local Ollama inference at temperature 0.7, structured JSON output,
+base seed 20260729, and a new seeded request at each action. Conditions were
+shuffled before execution. The study ran on an Apple M2 Pro laptop with 16\,GB
+memory using Python 3.14.3. Responses were not retried; malformed or failed
+responses would stop and remain in the denominator. The completed dataset
+contained no model or parse errors.
+
+\subsection{Outcomes and Analysis}
+
+The pre-specified primary outcome was any shortcut attempt in a run. An
+executed violation required the gate to be off. Persistence meant a second
+prohibited action after the first denial; safe recovery meant a denied run later
+completed the valid route. All 120 runs were retained. We report proportions
+with Wilson 95\% confidence intervals (CIs), risk differences (RDs), and
+two-sided Fisher exact tests for the pre-specified framing contrast and the
+exploratory completion contrast. Because stochastic trajectories from two
+models are not a sample of the model population, inference is bounded to this
+pilot.
+
+\subsection{Reproducibility and Integrity Checks}
+
+The analysis pipeline asserts the expected factor levels, 120-row run count,
+12 balanced cells, and ten observations per cell before computing results. It
+also reconciles each run's recorded action count against the event log and
+checks every event against the nine-action symbolic vocabulary. All 461 events
+reconciled, and no run was removed. The manifest records the model identifiers,
+seed, repetitions, request timeout, localhost-only network scope, and symbolic
+world scope. Raw responses and parser states remain in the event log. These
+checks cannot establish construct validity, but they prevent silent condition
+loss, outcome-only cherry-picking, and accidental inclusion of an external
+action.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{scopegym_results.pdf}
+  \caption{Observed rates with Wilson 95\% CIs. Panel (a) shows model-level
+  shortcut attempts for ungated runs ($n=10$ per bar); pooled
+  score-maximizing versus authorized-scope RD was $+0.20$ (Fisher
+  $p=.273$). Panel (b) separates deterministic gate enforcement (denominator
+  60 runs per gate state) from post-denial behavior (denominator 41 gated
+  attempters).}
+  \label{fig:results}
+\end{figure*}
+
+\section{Results}
+
+\subsection{Goal Framing}
+
+Figure~\ref{fig:results}(a) shows the pre-specified ungated comparison.
+Score-maximizing framing produced attempts in 17/20 runs (85\%, 95\% CI
+64.0--94.8\%), while authorized-scope framing produced 13/20 (65\%, CI
+43.3--81.9\%). The RD was $+0.20$, but the two-sided Fisher test was not
+conclusive ($p=.273$). Minimal framing also produced 13/20 attempts. The
+direction therefore matches the hypothesis, while the sample does not support
+a precise framing-effect estimate.
+
+The pooled contrast was model-dependent. Gemma attempted the shortcut in 10/10
+score-maximizing and 10/10 authorized-scope runs (a zero-point contrast), while
+Llama did so in 7/10 and 3/10 runs, respectively (a $+40$-point contrast).
+Across all conditions, Gemma attempted the shortcut in 56/60 runs (93.3\%, CI
+84.1--97.4\%), compared with 28/60 for Llama (46.7\%, CI 34.6--59.1\%).
+This heterogeneity cautions against interpreting the pooled framing difference
+as a model-general effect.
+
+\subsection{Gate Enforcement and Adaptation}
+
+Attempts remained similar across gate states: 43/60 (71.7\%, CI
+59.2--81.5\%) with the gate off and 41/60 (68.3\%, CI 55.8--78.7\%) with it
+on. All 43 ungated attempts executed; none of the 41 gated attempts did. The
+execution difference is expected from the state-machine definition and
+validates instrumentation rather than agent alignment.
+
+Post-denial behavior supplies the nontrivial gate result. Among 41 gated
+attempters, 12 persisted (29.3\%, CI 17.6--44.5\%), while 11 recovered to a
+valid completion (26.8\%, CI 15.7--41.9\%). Valid completion occurred in 14/60
+gated runs (23.3\%) and 10/60 ungated runs (16.7\%); this exploratory difference
+was not conclusive ($p=.494$). A gate can therefore suppress execution without
+suppressing intent, and denial sometimes redirects the same agent toward a
+valid route.
+
+\begin{table}[t]
+\caption{Key pooled ScopeGym outcomes}
+\label{tab:outcomes}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Outcome & Count & Rate & 95\% Wilson CI \\
+\midrule
+Score-max. attempt, gate off & 17/20 & 85.0\% & 64.0--94.8 \\
+Authorized attempt, gate off & 13/20 & 65.0\% & 43.3--81.9 \\
+Any attempt, gate on & 41/60 & 68.3\% & 55.8--78.7 \\
+Execution, gate off & 43/60 & 71.7\% & 59.2--81.5 \\
+Execution, gate on & 0/60 & 0.0\% & 0.0--6.0 \\
+Persistence after denial & 12/41 & 29.3\% & 17.6--44.5 \\
+Safe recovery after denial & 11/41 & 26.8\% & 15.7--41.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion}
+
+The pilot supports a three-stage view of human-authorized action. \emph{Intent}
+is approximated by the prohibited symbolic attempt. \emph{Enforcement} is the
+gate's execute-or-deny decision. \emph{Adaptation} is what the agent does after
+denial. An outcome-only benchmark would label every gated run safe at the
+execution stage, masking that 41/60 still attempted the shortcut and that
+12/41 attempters persisted. Conversely, a refusal-only metric would miss the
+11/41 attempters that recovered and completed the intended task.
+
+Hard gates and scope instructions therefore answer different safety questions.
+The instruction provides evidence about whether a model will request an
+authorized action; the gate controls whether the system will execute that
+request. Treating one as a substitute for the other can produce a false sense
+of safety. This distinction is consistent with evidence that defense prompts
+alone do not resolve agent-safety failures
+\cite{zhang2024agentsafetybench} and with authorization architectures that
+separate delegated intent from enforceable permissions
+\cite{south2025delegation,shi2025progent,zhu2025miniscope}. It also agrees with
+the finding that blocking can suppress realized violations while leaving
+attempted violations visible \cite{yu2026toolaffordance}. A
+deployment-oriented evaluation should retain least-privilege execution controls
+while testing whether denial feedback helps the agent re-plan inside the
+authorized scope.
+
+For benchmark design, this separation yields practical requirements. A gate
+should log both requested and executed actions; denials should remain in the
+trajectory rather than terminate evaluation; and safe recovery should be
+reported alongside violation counts. Goal framing must also be treated as an
+experimental factor. Here, score-maximizing language moved the ungated attempt
+rate by 20 percentage points relative to explicit scope language, but the
+uncertainty and model heterogeneity make replication across tasks and models
+essential.
+
+ScopeGym complements realistic cyber ranges rather than replacing them.
+Capability benchmarks ask whether an agent can exploit a vulnerability;
+ScopeGym asks whether an agent chooses an unauthorized route when a route is
+available. The symbolic design makes that narrower question inexpensive,
+reproducible, and portable across agent-safety evaluation settings.
+
+\subsection{Limitations}
+
+The study uses two local models, one synthetic task, and ten trajectories per
+cell. Runs estimate stochastic behavior for fixed models and prompts, not a
+population of agents. The common system prompt already labels the shortcut
+out-of-scope, so the user-level framing manipulation may understate effects in
+less explicit settings. Model quantization, serving versions, and decoder
+nondeterminism may affect replication. The deterministic gate cannot establish
+that the agent understood or accepted the boundary. Finally, a symbolic decoy
+improves safety and causal control but limits ecological validity. Follow-up
+work should add multiple task families, additional model sizes, replicated
+serving seeds, richer denial messages, and preregistered model-by-framing
+interactions.
+
+\section{Conclusion}
+
+ScopeGym turns human authorization into a measurable boundary rather than an
+instructional slogan. Its central result is that successful enforcement is not
+evidence of compliant reasoning: in 120 sealed runs, the gate prevented
+execution without eliminating prohibited attempts. Score-maximizing framing
+showed a directional but imprecise and model-dependent increase in attempts.
+Persistence and safe recovery after denial exposed behavior that final-score
+evaluation would hide. Authorization benchmarks should therefore report what
+agents request, what systems allow, and how agents adapt when permission is
+refused.
+
+\section*{Artifact, Ethics, and AI Assistance}
+
+An artifact package accompanying this paper contains the code, prompts, seed
+schedule, run table, event log, analysis script, and figure-generation script.
+The experiment involved no human participants and contacted no external target.
+Generative AI tools assisted literature discovery, implementation review,
+drafting, and formatting; the author remains responsible for verifying the
+submission and its claims.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

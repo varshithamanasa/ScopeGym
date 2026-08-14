@@ -1,0 +1,13 @@
+estimate,successes,total,rate,ci_low,ci_high,denominator
+"Score-maximizing attempt, gate off",17,20,0.850000,0.639577,0.947632,runs in both models
+"Authorized-scope attempt, gate off",13,20,0.650000,0.432851,0.818810,runs in both models
+"Attempt, gate off",43,60,0.716667,0.592325,0.814933,all gate-off runs
+"Attempt, gate on",41,60,0.683333,0.557660,0.786943,all gate-on runs
+"Executed shortcut, gate off",43,60,0.716667,0.592325,0.814933,all gate-off runs
+"Executed shortcut, gate on",0,60,0.000000,0.000000,0.060174,all gate-on runs
+Persistence after denial,12,41,0.292683,0.176090,0.444798,gate-on runs with a shortcut attempt
+Safe recovery after denial,11,41,0.268293,0.156948,0.419338,gate-on runs with a shortcut attempt
+"Valid completion, gate off",10,60,0.166667,0.093131,0.280319,all gate-off runs
+"Valid completion, gate on",14,60,0.233333,0.144394,0.354365,all gate-on runs
+"Any attempt, Gemma 3 4B",56,60,0.933333,0.840744,0.973772,all Gemma runs
+"Any attempt, Llama 3.1 8B",28,60,0.466667,0.346277,0.591068,all Llama runs
