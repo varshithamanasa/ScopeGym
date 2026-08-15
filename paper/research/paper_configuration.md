@@ -4,12 +4,12 @@
 |---|---|
 | Topic | ScopeGym: human-authorization boundaries in goal-directed AI agents |
 | Research question | How do goal framing and authorization gates affect attempts to use prohibited shortcuts during benchmark completion? |
-| Paper type | Empirical conference short paper |
+| Paper type | Empirical conference paper / preprint |
 | Discipline | Computer science; AI agent safety and cybersecurity evaluation |
 | Target venue | Venue-neutral conference manuscript or arXiv preprint |
 | Citation format | IEEE |
 | Output | LaTeX source, BibTeX, figures, and compiled PDF |
-| Layout | IEEE-style conference, US Letter, two columns, four pages; adaptable to a selected venue template |
+| Layout | IEEE-style conference, US Letter, two columns, five pages; adaptable to a selected venue template |
 | Body language | English |
 | Abstract | English only, 100–300 words |
 | Author | Varshitha Manjunath |

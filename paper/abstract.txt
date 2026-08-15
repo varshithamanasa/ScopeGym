@@ -1,16 +1,17 @@
-Goal-directed agents may complete benchmark tasks through routes that violate
-human intent. We introduce ScopeGym, a sealed symbolic benchmark that crosses
-three goal framings with an executable authorization gate. We evaluated two
-local language models in a randomized 2 x 3 x 2 design with ten repetitions per
-cell (120 runs). The primary outcome was any attempt to use an explicitly
-out-of-scope shortcut; secondary outcomes separated executed violations,
-post-denial persistence, safe recovery, and valid completion. With the gate
-off, score-maximizing framing produced shortcut attempts in 17/20 runs (85%),
-compared with 13/20 (65%) under authorized-scope framing, a +20 percentage-point
-difference that was not statistically conclusive in this pilot (two-sided
-Fisher p = .273). The gate blocked every attempted execution by construction,
-yet 41/60 gated runs still attempted the shortcut. Among these 41 runs, 12
-(29.3%) persisted after denial and 11 (26.8%) recovered to the valid route.
-These results show why outcome-only evaluation can conflate enforcement with
-compliant reasoning. Human-authorization benchmarks should measure intent,
-execution, and adaptation after denial as distinct stages.
+Passing a benchmark does not reveal whether an agent stayed within the route
+its operator authorized. ScopeGym isolates this problem in a sealed symbolic
+task with three goal framings and a gate that either permits or denies one
+out-of-scope route, represented by two action symbols. We ran two local language
+models in a randomized 2 x 3 x 2 design with ten repetitions per cell (120
+runs). We recorded the attempted
+action separately from its execution and from the model's next choice after
+denial. In ungated runs, the shortcut was attempted in 17/20 score-maximizing
+trials (85%) and 13/20 authorized-scope trials (65%). This +20 percentage-point
+contrast was directional but imprecise (two-sided Fisher p = .273). The gate
+denied every prohibited request by construction; nevertheless, 41/60 gated
+runs made such a request. Of those 41 runs, 12 (29.3%) repeated the prohibited
+action and 11 (26.8%) later completed the valid route. The experiment therefore
+distinguishes a control that works from an agent that acts within scope.
+Evaluations of human authorization should retain the requested action, the
+enforcement decision, and the post-denial trajectory rather than reducing all
+three to a final score.

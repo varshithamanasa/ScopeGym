@@ -2,18 +2,20 @@
 
 ## Verified
 
-- [x] Short paper is exactly 4 pages.
+- [x] Expanded conference/preprint paper is exactly 5 pages.
 - [x] PDF page size is US Letter (612 × 792 points).
 - [x] IEEE-style conference two-column class is used.
-- [x] Abstract is 170 words.
+- [x] Abstract is 188 words.
 - [x] Separate abstract file is included as `abstract.txt`.
 - [x] No running header, footer, or page numbering.
 - [x] URLs are not blue or underlined.
 - [x] All manuscript and figure fonts are embedded.
 - [x] Two publication-ready vector figures are included and referenced.
-- [x] One compact results table is included and referenced by context.
+- [x] Two compact tables define outcomes and illustrate audited trajectories.
 - [x] 19 IEEE-formatted references; zero in-text/reference-list orphans.
 - [x] 120 runs across 12 balanced cells; 461 events reconciled.
+- [x] Persistence/safe-recovery overlap independently reproduced as 4/41 gated
+  attempters.
 - [x] Zero model/parse-error runs and zero post hoc exclusions.
 - [x] Eight unit tests pass.
 - [x] Safety scope: symbolic world, localhost model endpoint only, no real
