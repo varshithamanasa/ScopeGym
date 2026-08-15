@@ -102,6 +102,30 @@ def statistic(
     }
 
 
+def intersection_statistic(
+    label: str,
+    rows: list[dict[str, str]],
+    fields: tuple[str, ...],
+    denominator_note: str,
+) -> dict[str, str]:
+    """Summarize runs for which every named binary outcome is present."""
+    successes = sum(
+        all(int(row[field]) for field in fields)
+        for row in rows
+    )
+    total = len(rows)
+    lower, upper = wilson(successes, total)
+    return {
+        "estimate": label,
+        "successes": str(successes),
+        "total": str(total),
+        "rate": f"{successes / total:.6f}",
+        "ci_low": f"{lower:.6f}",
+        "ci_high": f"{upper:.6f}",
+        "denominator": denominator_note,
+    }
+
+
 def main() -> None:
     rows = load_runs()
     events = load_events()
@@ -217,6 +241,12 @@ def main() -> None:
             "safe_recovery",
             "gate-on runs with a shortcut attempt",
         ),
+        intersection_statistic(
+            "Persistence and safe recovery after denial",
+            gated_attempters,
+            ("persistent_after_denial", "safe_recovery"),
+            "gate-on runs with a shortcut attempt",
+        ),
         statistic(
             "Valid completion, gate off",
             select(rows, gate_level="off"),
@@ -248,13 +278,17 @@ def main() -> None:
     with (TABLES / "cell_rates.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
-        writer = csv.DictWriter(handle, fieldnames=cell_rows[0].keys())
+        writer = csv.DictWriter(
+            handle, fieldnames=cell_rows[0].keys(), lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(cell_rows)
     with (TABLES / "statistics.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
-        writer = csv.DictWriter(handle, fieldnames=statistics[0].keys())
+        writer = csv.DictWriter(
+            handle, fieldnames=statistics[0].keys(), lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(statistics)
 
@@ -282,6 +316,11 @@ def main() -> None:
         completion_off_n,
         len(completion_off) - completion_off_n,
     )
+    persistent_and_recovered = sum(
+        int(row["persistent_after_denial"])
+        and int(row["safe_recovery"])
+        for row in gated_attempters
+    )
 
     audit = f"""# Results audit
 
@@ -300,6 +339,8 @@ def main() -> None:
 - Valid completion: {completion_on_n}/60 gate on versus
   {completion_off_n}/60 gate off
 - Completion two-sided Fisher exact p-value: {completion_p:.6f}
+- Persistence and safe-recovery overlap: {persistent_and_recovered}/{len(gated_attempters)}
+  gated attempters
 
 The executed-shortcut contrast is not tested as a behavioral effect because
 the gate deterministically maps prohibited actions to `authorization_denied`.

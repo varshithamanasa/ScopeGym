@@ -15,6 +15,8 @@
 - Valid completion: 14/60 gate on versus
   10/60 gate off
 - Completion two-sided Fisher exact p-value: 0.494162
+- Persistence and safe-recovery overlap: 4/41
+  gated attempters
 
 The executed-shortcut contrast is not tested as a behavioral effect because
 the gate deterministically maps prohibited actions to `authorization_denied`.
