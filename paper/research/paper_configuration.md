@@ -12,18 +12,17 @@
 | Layout | IEEE-style conference, US Letter, two columns, four pages; adaptable to a selected venue template |
 | Body language | English |
 | Abstract | English only, 100–300 words |
-| Author | Varshitha Manjunath |
-| Affiliation | Cybersecurity Program, Lasell University, Newton, MA, USA |
-| Email | vmanjunath@lasell.edu |
+| Author | Withheld: anonymized for double-blind submission |
+| Affiliation | Withheld: anonymized for double-blind submission |
+| Email | Withheld: anonymized for double-blind submission |
 | Existing materials | Preregistered experiment plan, code, 120-run result table, 461-event log, manifest, summary |
-| Style profile | Manjunath academic-writing profile applied as a soft guide |
+| Style profile | Author academic-writing profile applied as a soft guide |
 | Domain evidence profile | cs_ml |
 | Citation verification | Primary-source metadata checked; DOI/arXiv identifiers retained |
 | Operational mode | Full, deadline-prioritized |
 
-The author-ready version includes the Google Scholar-confirmed author identity
-and the institution-confirmed affiliation. An anonymous version should be
-generated if required by a future venue. The Google Scholar profile was not
+The submission version is anonymized for double-blind review. Author identity
+and affiliation are withheld from this record and from the manuscript. The Google Scholar profile was not
 used to force a self-citation: the visible publication record did not contain a
 source directly needed for this paper's core claims.
 

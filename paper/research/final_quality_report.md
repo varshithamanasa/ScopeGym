@@ -28,7 +28,7 @@ Experiment run: `20260729T205352Z-d956bd`
 
 ## Author Checks Still Required
 
-- Confirm the author name, affiliation, and email.
+- Author name, affiliation, and email are withheld for double-blind review.
 - Confirm the funding and conflict-of-interest declarations required by the venue.
 - Confirm whether review is anonymous before uploading the author-identified PDF.
 - Decide whether to upload the artifact ZIP or replace the artifact statement with a public repository link.
