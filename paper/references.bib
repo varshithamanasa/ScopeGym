@@ -4,6 +4,13 @@
 % Crossref/OpenAlex/Semantic Scholar metadata otherwise. ExploitGym is the
 % single approved preprint exception.
 
+% IEEEtran.bst control entry. Disables replacing a repeated author name with a
+% dash, so the two IEEE standards each print "IEEE" instead of rendering the
+% second one as "------".
+@IEEEtranBSTCTL{IEEEtranBSTCTL:scopegym,
+  CTLdash_repeated_names = "no"
+}
+
 @inproceedings{pan2022reward,
   author    = {Alexander Pan and Kush Bhatia and Jacob Steinhardt},
   title     = {The Effects of Reward Misspecification: Mapping and Mitigating Misaligned Models},

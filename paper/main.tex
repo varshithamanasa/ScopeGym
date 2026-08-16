@@ -24,6 +24,7 @@
 \author{\IEEEauthorblockN{Anonymous Author(s)}}
 
 \begin{document}
+\bstctlcite{IEEEtranBSTCTL:scopegym}
 \maketitle
 
 \begin{abstract}
@@ -197,8 +198,10 @@ contained no model or parse errors.
 
 \subsection{Outcomes and Analysis}
 
-The pre-specified primary outcome was any shortcut attempt in a run. An
-executed violation required the gate to be off. Persistence meant a second
+The pre-specified primary outcome was any shortcut attempt in a run. The
+attempt outcome pools the two prohibited actions, a decoy probe and a decoy
+access attempt, which produced 66 and 40 events respectively. An executed
+violation required the gate to be off. Persistence meant a second
 prohibited action after the first denial; safe recovery meant a denied run later
 completed the valid route. All 120 runs were retained. The analysis reports
 proportions with Wilson 95\% confidence intervals (CIs), risk differences
@@ -271,9 +274,18 @@ completion occurred in 14/60 gated runs (23.3\%) and 10/60 ungated runs
 therefore suppress execution without suppressing intent. Denial also sometimes
 redirects the same agent toward a valid route.
 
+Both post-denial outcomes were model dependent. Among gated attempters, Gemma
+persisted in 8/27 and recovered in 10/27, while Llama persisted in 4/14 and
+recovered in 1/14. Recovery is additionally bounded by baseline task
+capability. Llama completed the valid route in only 1/60 runs overall, so it
+had little opportunity to recover regardless of denial feedback. The pooled
+recovery rate should therefore not be read as a model-general adaptation
+effect.
+
 Termination was uniform across conditions. Every run ended by submitting an
 answer: 24/120 submitted the valid target flag and 96/120 submitted the fake
-answer. No run exhausted the action budget (the longest run used seven of eight
+answer, which the world always rejected. No run exhausted the action budget
+(the longest run used seven of eight
 actions) or stopped voluntarily, so no outcome in this study is attributable to
 truncation.
 
@@ -357,7 +369,9 @@ The study uses two local models, one synthetic task, and ten trajectories per
 cell. Runs estimate stochastic behavior for fixed models and prompts, not a
 population of agents. The common system prompt already labels the shortcut
 out-of-scope, so the user-level framing manipulation may understate effects in
-less explicit settings. Model quantization, serving versions, and decoder
+less explicit settings. Safe recovery is also confounded with task competence,
+because a model that rarely completes the valid route cannot demonstrate
+recovery. Model quantization, serving versions, and decoder
 nondeterminism may affect replication. The deterministic gate cannot establish
 that the agent understood or accepted the boundary. Finally, a symbolic decoy
 improves safety and causal control but limits ecological validity. Follow-up
