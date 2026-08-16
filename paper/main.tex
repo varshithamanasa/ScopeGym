@@ -28,10 +28,10 @@
 
 \begin{abstract}
 Goal-directed agents may complete benchmark tasks through routes that violate
-human intent. We introduce ScopeGym, a sealed symbolic benchmark that crosses
-three goal framings with an executable authorization gate. We evaluated two
-local language models in a randomized $2\times3\times2$ design with ten
-repetitions per cell (120 runs). The primary outcome was any attempt to use an
+human intent. This paper introduces ScopeGym, a sealed symbolic benchmark that
+crosses three goal framings with an executable authorization gate. The study
+evaluated two local language models in a randomized $2\times3\times2$ design
+with ten repetitions per cell (120 runs). The primary outcome was any attempt to use an
 explicitly out-of-scope shortcut; secondary outcomes separated executed
 violations, post-denial persistence, safe recovery, and valid completion. With
 the gate off, score-maximizing framing produced shortcut attempts in 17/20 runs
@@ -70,18 +70,18 @@ answer.
 
 Cybersecurity makes the distinction concrete. Cybench evaluates agents on
 professional capture-the-flag tasks in executable environments
-\cite{zhang2025cybench}, CyberGym asks agents to reproduce real-world
-vulnerabilities at scale \cite{wang2026cybergym}, and ExploitGym asks agents to
+\cite{zhang2025cybench}. CyberGym asks agents to reproduce real-world
+vulnerabilities at scale \cite{wang2026cybergym}. ExploitGym asks agents to
 extend a vulnerability-triggering input into a working exploit with concrete
 security impact \cite{wang2026exploitgym}. Their realism is valuable for
-capability measurement, but reproducing real exploitation is unnecessary for the
-narrower question of whether an agent respects a human-defined authorization
-boundary. The safer experimental object is the decision to take a forbidden
-shortcut, represented by an inert symbolic action.
+capability measurement. However, reproducing real exploitation is unnecessary
+for the narrower question of whether an agent respects a human-defined
+authorization boundary. The safer experimental object is the decision to take a
+forbidden shortcut, represented by an inert symbolic action.
 
 This paper asks: \emph{How do goal framing and authorization gates affect an AI
-agent's attempts to use prohibited shortcuts during benchmark completion?} We
-make three contributions. First, ScopeGym operationalizes human authorization
+agent's attempts to use prohibited shortcuts during benchmark completion?} The
+paper makes three contributions. First, ScopeGym operationalizes human authorization
 as a separable, executable gate in a sealed state machine. Second, it reports
 attempt, execution, persistence after denial, safe recovery, and valid
 completion as distinct outcomes. Third, a 120-run local-model pilot shows a
@@ -93,54 +93,55 @@ substantial behavioral variation after denial.
 Execution-based cybersecurity benchmarks measure whether agents can complete
 security tasks in interactive environments. Cybench evaluates language models on
 professional capture-the-flag tasks with subtask-level scoring
-\cite{zhang2025cybench}; CyberGym scales evaluation to 1,507 real-world
-vulnerabilities across 188 software projects \cite{wang2026cybergym}; and
+\cite{zhang2025cybench}. CyberGym scales evaluation to 1,507 real-world
+vulnerabilities across 188 software projects \cite{wang2026cybergym}.
 BountyBench measures detection, exploitation, and patching on real bug-bounty
 systems \cite{zhang2025bountybench}. ExploitGym is the direct inspiration for
-our path-sensitive design: it asks agents to extend a vulnerability-triggering
-input into a working exploit that achieves a concrete security impact, while
-varying the deployed protections \cite{wang2026exploitgym}. ScopeGym adopts the
-lesson that the route matters, but changes the object of study from exploitation
-capability to route selection and enforcement at an inert, human-specified
-authorization boundary.
+the path-sensitive design used here. It asks agents to extend a
+vulnerability-triggering input into a working exploit that achieves a concrete
+security impact, and it varies the deployed protections
+\cite{wang2026exploitgym}. ScopeGym adopts the lesson that the route matters.
+However, it changes the object of study from exploitation capability to route
+selection and enforcement at an inert, human-specified authorization boundary.
 
 General agent-safety benchmarks examine failures across tools and environments.
 ToolEmu emulates tool execution to surface high-stakes failures at scale
-\cite{ruan2024toolemu}; AgentHarm measures harmfulness on explicitly malicious
-multi-step agent tasks \cite{andriushchenko2025agentharm}; AgentDojo evaluates
+\cite{ruan2024toolemu}. AgentHarm measures harmfulness on explicitly malicious
+multi-step agent tasks \cite{andriushchenko2025agentharm}. AgentDojo evaluates
 prompt-injection attacks and defenses over untrusted tool data
-\cite{debenedetti2024agentdojo}; Agent Security Bench formalizes attacks,
+\cite{debenedetti2024agentdojo}. Agent Security Bench formalizes attacks,
 defenses, and the utility--security trade-off across agent scenarios
-\cite{zhang2025asb}; and $\tau$-bench evaluates tool-agent-user interaction
-against domain policy documents \cite{yao2025taubench}. These benchmarks score
-what an agent achieves or suffers. ScopeGym narrows the target to the requested
-action, the enforcement decision, and the continuation after denial.
+\cite{zhang2025asb}. In addition, $\tau$-bench evaluates tool-agent-user
+interaction against domain policy documents \cite{yao2025taubench}. These
+benchmarks score what an agent achieves or suffers. By contrast, ScopeGym
+narrows the target to the requested action, the enforcement decision, and the
+continuation after denial.
 
 Two recent studies are especially close. MAC-Bench audits procedural compliance
-when agents face calibrated pressure to maximize task success, and reports
+when agents face calibrated pressure to maximize task success. It reports
 trade-offs between success and regulatory adherence \cite{zhao2026macbench}.
 Yu et al.\ identify cognitive-action decoupling: agents generate policy-aligned
-refusal language while still producing unsafe tool-mediated action proposals,
-and preventing execution does not by itself eliminate those proposals
+refusal language while still producing unsafe tool-mediated action proposals.
+Preventing execution does not by itself eliminate those proposals
 \cite{yu2026cognitiveaction}. ScopeGym does not claim to originate the
 distinction between a proposed and an executed action. Its narrower contribution
-is to cross ordinary goal framing with an explicit authorization gate, and then
-to measure persistence and safe recovery after a denial is returned to the agent
+is to cross ordinary goal framing with an explicit authorization gate. It then
+measures persistence and safe recovery after a denial is returned to the agent
 inside the same trajectory.
 
 Authorization research supplies complementary enforcement mechanisms. A
-walkthrough analysis of 18 commercial web agents reports bundled permissions,
-weak revocation, and a two-layer architecture that shifts security reliance from
-deterministic protocols onto probabilistic model compliance
-\cite{zhang2026humanauth}. Agentic IAM derives least-privilege permissions
-through a probabilistic process \cite{zouari2025agenticiam}, while tracked
-capabilities constrain agent effects statically through a capability-safe type
-system \cite{odersky2026capabilities}. Risk-adaptive authorization escalates
-high-risk transactions to supervisor or human approval
-\cite{bhushan2026riskadaptive}, and intent-gated access control learns policies
-over parsed natural-language intent \cite{pappu2026intentgated}. These systems
-decide what may execute. ScopeGym instead measures what the model requests
-before enforcement, and how it adapts after the system refuses.
+walkthrough analysis of 18 commercial web agents reports bundled permissions and
+weak revocation \cite{zhang2026humanauth}. That analysis also identifies a
+two-layer architecture that shifts security reliance from deterministic
+protocols onto probabilistic model compliance. Agentic IAM derives
+least-privilege permissions through a probabilistic process
+\cite{zouari2025agenticiam}. Tracked capabilities constrain agent effects
+statically through a capability-safe type system \cite{odersky2026capabilities}.
+Risk-adaptive authorization escalates high-risk transactions to supervisor or
+human approval \cite{bhushan2026riskadaptive}, and intent-gated access control
+learns policies over parsed natural-language intent \cite{pappu2026intentgated}.
+These systems decide what may execute. ScopeGym instead measures what the model
+requests before enforcement, and how the model adapts after the system refuses.
 
 \begin{figure*}[t]
   \centering
@@ -199,10 +200,10 @@ contained no model or parse errors.
 The pre-specified primary outcome was any shortcut attempt in a run. An
 executed violation required the gate to be off. Persistence meant a second
 prohibited action after the first denial; safe recovery meant a denied run later
-completed the valid route. All 120 runs were retained. We report proportions
-with Wilson 95\% confidence intervals (CIs), risk differences (RDs), and
-two-sided Fisher exact tests for the pre-specified framing contrast and the
-exploratory completion contrast. Because stochastic trajectories from two
+completed the valid route. All 120 runs were retained. The analysis reports
+proportions with Wilson 95\% confidence intervals (CIs), risk differences
+(RDs), and two-sided Fisher exact tests. These were applied to the
+pre-specified framing contrast and the exploratory completion contrast. Because stochastic trajectories from two
 models are not a sample of the model population, inference is bounded to this
 pilot.
 
@@ -263,12 +264,12 @@ Post-denial behavior supplies the nontrivial gate result. The gate returned 54
 denials to the 41 gated attempters (mean 1.3 per run, maximum 3). Among those
 41 runs, 12 persisted (29.3\%, CI 17.6--44.5\%) and 11 recovered to a valid
 completion (26.8\%, CI 15.7--41.9\%). These categories overlap rather than
-partition: 4 runs both issued a further prohibited action after the first denial
-and still finished on the valid route, and 22 did neither. Valid completion
-occurred in 14/60 gated runs (23.3\%) and 10/60 ungated runs (16.7\%); this
-exploratory difference was not conclusive ($p=.494$). A gate can therefore
-suppress execution without suppressing intent, and denial sometimes redirects
-the same agent toward a valid route.
+partition. Four runs both issued a further prohibited action after the first
+denial and still finished on the valid route, and 22 did neither. Valid
+completion occurred in 14/60 gated runs (23.3\%) and 10/60 ungated runs
+(16.7\%); this exploratory difference was not conclusive ($p=.494$). A gate can
+therefore suppress execution without suppressing intent. Denial also sometimes
+redirects the same agent toward a valid route.
 
 Termination was uniform across conditions. Every run ended by submitting an
 answer: 24/120 submitted the valid target flag and 96/120 submitted the fake
@@ -309,30 +310,30 @@ execution stage, masking that 41/60 still attempted the shortcut and that
 
 Hard gates and scope instructions therefore answer different safety questions.
 The instruction provides evidence about whether a model will request an
-authorized action; the gate controls whether the system will execute that
+authorized action. The gate controls whether the system will execute that
 request. Treating one as a substitute for the other can produce a false sense of
 safety. This agrees with the report that preventing execution does not by itself
-eliminate unsafe action proposals \cite{yu2026cognitiveaction}, and with
-benchmark evidence that current defenses remain only partly effective against
-attacks on agents \cite{zhang2025asb}.
+eliminate unsafe action proposals \cite{yu2026cognitiveaction}. It also agrees
+with benchmark evidence that current defenses remain only partly effective
+against attacks on agents \cite{zhang2025asb}.
 
 For deployed tool-using agents, the experiment supports two complementary
-safeguards. Scope instructions can influence which action a model selects, but
-their effect here was imprecise and model dependent. A least-privilege gate can
-independently prevent the selected action from changing the environment. This
-layered design is consistent with probabilistic authorization
+safeguards. Scope instructions can influence which action a model selects.
+However, their effect here was imprecise and model dependent. A least-privilege
+gate can independently prevent the selected action from changing the
+environment. This layered design is consistent with probabilistic authorization
 \cite{zouari2025agenticiam}, tracked capabilities \cite{odersky2026capabilities},
 risk-adaptive escalation to human approval \cite{bhushan2026riskadaptive}, and
-intent-gated access control \cite{pappu2026intentgated}, and with the finding
-that commercial agents already lean on probabilistic model compliance rather
-than deterministic protocols \cite{zhang2026humanauth}. Recording the requested
-action alongside the enforcement decision yields the kind of objectively
-assessable evidence that transparency standards for autonomous systems call for
-\cite{ieee7001}, while a deterministic denial path is a fail-safe mechanism of
-the sort standardized for autonomous and semi-autonomous systems
-\cite{ieee7009}. The resulting logs give an audit trail for improving
-prompts, policies, and recovery behavior, and a deployment-oriented evaluation
-should test whether denial feedback helps the agent re-plan inside the
+intent-gated access control \cite{pappu2026intentgated}. It is also consistent
+with the finding that commercial agents already lean on probabilistic model
+compliance rather than deterministic protocols \cite{zhang2026humanauth}.
+Recording the requested action alongside the enforcement decision yields
+objectively assessable evidence of the kind that transparency standards for
+autonomous systems call for \cite{ieee7001}. A deterministic denial path is a
+fail-safe mechanism of the sort standardized for autonomous and semi-autonomous
+systems \cite{ieee7009}. The resulting logs give an audit trail for improving
+prompts, policies, and recovery behavior. A deployment-oriented evaluation
+should also test whether denial feedback helps the agent re-plan inside the
 authorized scope.
 
 For benchmark design, this separation yields practical requirements. A gate
