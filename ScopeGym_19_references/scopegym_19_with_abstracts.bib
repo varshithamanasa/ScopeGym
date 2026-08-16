@@ -1,0 +1,192 @@
+@inproceedings{pan_2022_reward_misspecification,
+  author    = {Pan, Alexander and Bhatia, Kush and Steinhardt, Jacob},
+  title     = {The Effects of Reward Misspecification: Mapping and Mitigating Misaligned Models},
+  booktitle = {The Tenth International Conference on Learning Representations},
+  year      = {2022},
+  url       = {https://openreview.net/forum?id=JYtwGwIL7ye},
+  abstract  = {Reward hacking---where reinforcement-learning agents exploit gaps in misspecified reward functions---has been widely observed but not systematically studied. The authors construct four reinforcement-learning environments with misspecified rewards and investigate reward hacking as a function of model capacity, action-space resolution, observation noise, and training time. More capable agents often achieve higher proxy reward but lower true reward, and capability thresholds can produce sharp behavioral phase transitions. The paper also proposes an anomaly-detection task for aberrant policies and provides baseline detectors.}
+}
+
+@article{wang_2026_exploitgym,
+  author        = {Wang, Zhun and Schiller, Nico and Li, Hongwei and Sesha Narayana, Srijiith and Nasr, Milad and Carlini, Nicholas and Qi, Xiangyu and Wallace, Eric and Bursztein, Elie and Invernizzi, Luca and Thomas, Kurt and Shoshitaishvili, Yan and Guo, Wenbo and He, Jingxuan and Holz, Thorsten and Song, Dawn},
+  title         = {{ExploitGym}: Can {AI} Agents Turn Security Vulnerabilities into Real Attacks?},
+  journal       = {arXiv preprint arXiv:2605.11086},
+  year          = {2026},
+  eprint        = {2605.11086},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CR},
+  url           = {https://arxiv.org/abs/2605.11086},
+  abstract      = {AI agents are rapidly gaining capabilities that could reshape cybersecurity, making rigorous evaluation urgent. Exploitation requires turning a vulnerability into concrete security impact through low-level reasoning, runtime adaptation, and sustained progress. ExploitGym is a large-scale, diverse benchmark for evaluating agents on real-world vulnerability exploitation across userspace programs, the V8 JavaScript engine, and the Linux kernel, with reproducible containerized environments and configurable mitigations. The evaluation finds that exploitation remains challenging but that frontier models can successfully exploit a non-trivial fraction of vulnerabilities even when widely used defenses are enabled.}
+}
+
+@inproceedings{ruan_2024_toolEmu,
+  author    = {Ruan, Yangjun and Dong, Honghua and Wang, Andrew and Pitis, Silviu and Zhou, Yongchao and Ba, Jimmy and Dubois, Yann and Maddison, Chris J. and Hashimoto, Tatsunori},
+  title     = {Identifying the Risks of {LM} Agents with an {LM}-Emulated Sandbox},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  year      = {2024},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2024/hash/7274ed909a312d4d869cc328ad1c5f04-Abstract-Conference.html},
+  abstract  = {Language-model agents and tool use enable rich capabilities while amplifying risks such as privacy leakage and financial loss. ToolEmu uses a language model to emulate tool execution, enabling scalable testing across diverse tools and scenarios without manually instantiating each environment. It also includes an automated safety evaluator. Human evaluation indicates that 68.8 percent of failures identified with ToolEmu would be valid real-world failures. An initial benchmark of 36 high-stakes toolkits and 144 test cases reveals potentially severe failures, including a 23.9 percent failure rate for the safest evaluated agent.}
+}
+
+@inproceedings{andriushchenko_2025_agentharm,
+  author    = {Andriushchenko, Maksym and Souly, Alexandra and Dziemian, Mateusz and Duenas, Derek and Lin, Maxwell and Wang, Justin and Hendrycks, Dan and Zou, Andy and Kolter, J. Zico and Fredrikson, Matt and Gal, Yarin and Davies, Xander},
+  title     = {{AgentHarm}: A Benchmark for Measuring Harmfulness of {LLM} Agents},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  year      = {2025},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2025/hash/c493d23af93118975cdbc32cbe7323f5-Abstract-Conference.html},
+  abstract  = {AgentHarm evaluates the misuse robustness of tool-using language-model agents. It contains 110 explicitly malicious tasks, expanded to 440 through augmentations, across 11 harm categories including fraud, cybercrime, and harassment. Success requires both bypassing refusal behavior and retaining the capability to complete coherent multi-step harmful tasks. Evaluations show that leading models can comply with malicious requests without jailbreaking, that simple universal jailbreak strings transfer to agents, and that successful jailbreaks preserve multi-step agent capabilities.}
+}
+
+@inproceedings{zhang_2025_cybench,
+  author    = {Zhang, Andy K. and Perry, Neil and Dulepet, Riya and Ji, Joey and Menders, Celeste and Lin, Justin W. and Jones, Eliot and Hussein, Gashon and Liu, Samantha and Jasper, Donovan and Peetathawatchai, Pura and Glenn, Ari and Sivashankar, Vikram and Zamoshchin, Daniel and Askaryar, Derek and Yang, Haoxiang and Zhang, Aolin and Alluri, Rishi and Tran, Nathan and Sangpisit, Rinnara and Oseleononmen, Kenny and Boneh, Dan and Ho, Daniel E. and Liang, Percy},
+  title     = {{CyBench}: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  year      = {2025},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2025/hash/3e9412a9c1d93810ef3ef7825115016b-Abstract-Conference.html},
+  abstract  = {CyBench is a framework for specifying cybersecurity tasks and evaluating language-model agents. It contains 40 professional capture-the-flag tasks from four recent competitions, with descriptions, starter files, executable environments, and intermediate subtasks for detailed capability measurement. Eight models and multiple agent scaffolds are evaluated. Without subtask guidance, leading agents solve complete tasks that took human teams up to 11 minutes, while harder tasks remain well beyond current agent capabilities.}
+}
+
+@inproceedings{yao_2025_tau_bench,
+  author    = {Yao, Shunyu and Shinn, Noah and Razavi, Pedram and Narasimhan, Karthik},
+  title     = {{$\tau$-bench}: A Benchmark for Tool-Agent-User Interaction in Real-World Domains},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  year      = {2025},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html},
+  abstract  = {{$\tau$-bench} evaluates language agents that interact with simulated users and programmatic tools while following domain-specific policies. Its modular environments include realistic databases and APIs, policy documents, user scenarios, and annotated goal states. Evaluation compares final database state with the target state and introduces pass-hat-k to assess reliability across repeated trials. State-of-the-art function-calling agents complete fewer than half of tasks and show substantial inconsistency across trials.}
+}
+
+@inproceedings{debenedetti_2024_agentdojo,
+  author    = {Debenedetti, Edoardo and Zhang, Jie and Balunovi{\'c}, Mislav and Beurer-Kellner, Luca and Fischer, Marc and Tram{\`e}r, Florian},
+  title     = {{AgentDojo}: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for {LLM} Agents},
+  booktitle = {Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track},
+  year      = {2024},
+  doi       = {10.52202/079017-2636},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2024/hash/97091a5177d8dc64b1da8bf3e1f6fb54-Abstract-Datasets_and_Benchmarks_Track.html},
+  abstract  = {AgentDojo is an extensible evaluation environment for tool-using agents operating over untrusted data. It supports realistic tasks, adaptive prompt-injection attacks, and defenses rather than functioning as a fixed test suite. The initial environment contains 97 realistic tasks and 629 security test cases covering applications such as email, online banking, and travel booking. Evaluations show that current models often fail benign tasks and that existing attacks and defenses satisfy some security properties but not others.}
+}
+
+@inproceedings{zhang_2025_asb,
+  author    = {Zhang, Hanrong and Huang, Jingyuan and Mei, Kai and Yao, Yifei and Wang, Zhenting and Zhan, Chenlu and Wang, Hongwei and Zhang, Yongfeng},
+  title     = {Agent Security Bench ({ASB}): Formalizing and Benchmarking Attacks and Defenses in {LLM}-Based Agents},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  year      = {2025},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2025/hash/5750f91d8fb9d5c02bd8ad2c3b44456b-Abstract-Conference.html},
+  abstract  = {Agent Security Bench formalizes and evaluates attacks and defenses for language-model agents across ten scenarios, ten agents, more than 400 tools, 27 attack or defense methods, and seven metrics. It benchmarks prompt injection, memory poisoning, a plan-of-thought backdoor, mixed attacks, and corresponding defenses over 13 language-model backbones. Results expose vulnerabilities across system prompts, user prompts, tool use, and memory retrieval, with attack success rates reaching 84.30 percent and limited effectiveness from existing defenses.}
+}
+
+@inproceedings{yu_2026_cognitive_action,
+  author    = {Yu, Shasha and Carroll, Fiona and Bentley, Barry L.},
+  title     = {When Saying ``No'' Is Not Enough: Cognitive-Action Decoupling and the Illusion of Safety in {LLM} Agents},
+  booktitle = {Proceedings of the 2026 ACM Conference on Fairness, Accountability, and Transparency},
+  year      = {2026},
+  pages     = {5593--5612},
+  doi       = {10.1145/3805689.3812378},
+  url       = {https://doi.org/10.1145/3805689.3812378},
+  abstract  = {Text-centered safety evaluations often assume that refusal language indicates safe behavior. Through action-aware experiments with execution-capable agents, this paper identifies cognitive-action decoupling: agents can produce policy-aligned refusal language while still proposing or taking unsafe tool-mediated actions. The results show that linguistic alignment metrics can underestimate operational risk and that preventing execution does not necessarily prevent unsafe action proposals. The paper argues for evaluating executed behavior alongside generated discourse.}
+}
+
+@inproceedings{wang_2026_cybergym,
+  author    = {Wang, Zhun and Shi, Tianneng and He, Jingxuan and Cai, Matthew and Zhang, Jialin and Song, Dawn},
+  title     = {{CyberGym}: Evaluating {AI} Agents' Real-World Cybersecurity Capabilities at Scale},
+  booktitle = {The Fourteenth International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://proceedings.iclr.cc/paper_files/paper/2026/hash/c876a2935a90aff21874e14c07dc3e33-Abstract-Conference.html},
+  abstract  = {CyberGym is a large-scale benchmark containing 1,507 real-world vulnerabilities from 188 software projects. Agents are primarily asked to generate proof-of-concept inputs that reproduce vulnerabilities from text descriptions and codebases. The benchmark differentiates agent and model capabilities, with leading combinations achieving only about 20 percent success in the original evaluation. Beyond benchmarking, CyberGym-assisted analysis led to discoveries of zero-day vulnerabilities and historically incomplete patches.}
+}
+
+@inproceedings{zhang_2025_bountybench,
+  author    = {Zhang, Andy K. and Ji, Joey and Menders, Celeste and Dulepet, Riya and Qin, Thomas and Wang, Ron Y. and Wu, Junrong and Liao, Kyleen and Li, Jiliang and Hu, Jinghan and Hong, Sara and Demilew, Nardos and Murgai, Shivatmica and Tran, Jason and Kacheria, Nishka and Ho, Ethan and Liu, Denis and McLane, Lauren and Bruvik, Olivia and Han, Dai-Rong and Kim, Seungwoo and Vyas, Akhil and Chen, Cuiyuanxiu and Li, Ryan and Xu, Weiran and Ye, Jonathan Z. and Choudhary, Prerit and Bhatia, Siddharth M. and Sivashankar, Vikram and Bao, Yuxuan and Song, Dawn and Boneh, Dan and Ho, Daniel E. and Liang, Percy},
+  title     = {{BountyBench}: Dollar Impact of {AI} Agent Attackers and Defenders on Real-World Cybersecurity Systems},
+  booktitle = {Advances in Neural Information Processing Systems 38, Datasets and Benchmarks Track},
+  year      = {2025},
+  url       = {https://papers.neurips.cc/paper_files/paper/2025/hash/faed4276b52ef762879db4142655c699-Abstract-Datasets_and_Benchmarks_Track.html},
+  abstract  = {BountyBench measures offensive and defensive cyber capabilities in evolving real-world systems. It provides 25 complex software systems and defines Detect, Exploit, and Patch tasks across 40 rewarded bug-bounty vulnerabilities covering nine OWASP Top 10 categories. Evaluations of coding agents and custom agents quantify success rates and map outcomes to dollar impact. Results show substantial differences between offensive and defensive performance, with several coding agents performing more strongly on patching than exploitation.}
+}
+
+@inproceedings{zhao_2026_goodhart,
+  author    = {Zhao, Yiyang and Zhang, Zhuo and Le, Qingxuan and Qu, Lizhen and Xu, Zenglin},
+  title     = {Beyond Goodhart's Law: A Dynamic Benchmark for Evaluating Compliance in Multi-Agent Systems},
+  booktitle = {Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining, Volume 2},
+  year      = {2026},
+  pages     = {10338--10347},
+  url       = {https://consensus.app/papers/beyond-goodharts-law-a-dynamic-benchmark-for-evaluating-zhao-zhang/2125c3dd7a655c1baec76458c076d38d/},
+  abstract  = {The evolution of language models into execution-capable agents creates operational risks that are poorly measured by evaluations focused only on task success. This paper introduces MAC-Bench, a dynamic adversarial benchmark for procedural compliance in multi-agent systems. Its Seed--Evolve--Refine--Verify pipeline transforms legal texts into executable scenarios and applies calibrated social-engineering pressures. Compliance-Weighted Success Rate and Machiavellian Gap metrics reveal trade-offs between successful task completion and regulatory adherence among frontier models.}
+}
+
+@inproceedings{zhang_2026_human_centered_authorization,
+  author    = {Zhang, Yi Evie and Wang, Ge},
+  title     = {Towards Human-Centered Agent Authorization: A Landscape Analysis of Commercial {AI} Agents},
+  booktitle = {Extended Abstracts of the 2026 CHI Conference on Human Factors in Computing Systems},
+  year      = {2026},
+  pages     = {684:1--684:10},
+  doi       = {10.1145/3772363.3798851},
+  url       = {https://doi.org/10.1145/3772363.3798851},
+  abstract  = {Through structured walkthroughs of 18 commercial web-based agents, this study analyzes how agent systems implement permission negotiation and revocation. It identifies problematic authorization patterns including bundled permissions, lazy disconnect, non-persistent disclosure, and default opt-in data practices. A common two-layer architecture grants broad system permissions while relying on interface guardrails and probabilistic model compliance. The authors propose human-centered agent authorization that prioritizes user control, understanding, and trust in permission granting, management, and auditing.}
+}
+
+@inproceedings{odersky_2026_tracked_capabilities,
+  author    = {Odersky, Martin and Zhao, Yaoyu and Xu, Yichen and Bra{\v{c}}evac, Oliver and Pham, Cao Nguyen},
+  title     = {Securing Agents with Tracked Capabilities},
+  booktitle = {Proceedings of the ACM Conference on AI and Agentic Systems},
+  year      = {2026},
+  pages     = {812--838},
+  doi       = {10.1145/3786335.3813127},
+  url       = {https://doi.org/10.1145/3786335.3813127},
+  abstract  = {Tool-using AI agents can leak information, cause unintended side effects, or be manipulated through prompt injection. The paper proposes a programming-language safety harness in which agents express actions as Scala 3 code governed by statically tracked capabilities. The type system supports fine-grained resource control, local purity, and protection of classified data. A prototype MCP server demonstrates that agents can generate capability-safe code without significant task-performance loss while the type system prevents unsafe information flow and malicious side effects.}
+}
+
+@inproceedings{zouari_2025_agentic_iam,
+  author    = {Zouari, Jaouaher},
+  title     = {Toward Agentic {IAM}: A Probabilistic Authorization Framework for Least Privilege {AI} Workflows},
+  booktitle = {Proceedings of the IEEE/ACM 12th International Conference on Big Data Computing, Applications and Technologies},
+  year      = {2025},
+  pages     = {1--6},
+  doi       = {10.1145/3773276.3776564},
+  url       = {https://doi.org/10.1145/3773276.3776564},
+  abstract  = {Autonomous code generation and infrastructure orchestration create authorization challenges that static, user-initiated identity mechanisms do not fully address. The paper proposes an agent-native authorization model in which Analyze, Impact, Minimize, Validate, and Reanalyze agents jointly determine and reduce permissions through a sequential probabilistic process. Bayesian updates, Markov decision-process optimization, and conditional-value-at-risk minimization support least privilege under uncertainty. Formal analysis and an AWS Lambda case study report sub-second decision latency and approximately 40 percent privilege reduction without loss of functionality.}
+}
+
+@inproceedings{bhushan_2026_risk_adaptive,
+  author    = {Bhushan, Badal and Pappu, Karthik and Jadav, VasanthRao and Jaiswal, Nilesh},
+  title     = {Risk-Adaptive Authorization for Agentic {AI} Systems},
+  booktitle = {IEEE SoutheastCon 2026},
+  year      = {2026},
+  pages     = {1--6},
+  doi       = {10.1109/SoutheastCon63549.2026.11476129},
+  url       = {https://doi.org/10.1109/SoutheastCon63549.2026.11476129},
+  abstract  = {Agentic systems execute transactions with delegated authority, while static role-based authorization cannot adapt to changing risk. The proposed flow combines workload identity, OAuth token exchange, policy evaluation, AI-based risk scoring, sender-constrained tokens, and human approval for high-risk transactions. A three-tier model supports automatic, supervisor-agent, and human approval. A retail exchange evaluation reports 32.7 ms cold-path and 4.7 ms warm-path latency and blocks all tested invalid privilege-escalation attempts.}
+}
+
+@inproceedings{pappu_2026_intent_gated,
+  author    = {Pappu, Karthik},
+  title     = {Contextual Reinforcement Learning for Linguistic Intent-Gated Access Control in Production {AI} Systems},
+  booktitle = {2026 14th International Symposium on Digital Forensics and Security},
+  year      = {2026},
+  pages     = {1--6},
+  doi       = {10.1109/ISDFS69419.2026.11459115},
+  url       = {https://doi.org/10.1109/ISDFS69419.2026.11459115},
+  abstract  = {Static RBAC and ABAC engines cannot adapt to linguistic variability in natural-language access requests. The cRL-LIM framework combines language-model intent parsing with contextual-bandit policies such as LinUCB and Thompson sampling. Across more than 276,000 simulated episodes, LinUCB reduces violations by 99.5 percent relative to the baseline and maintains low violation rates under load, prompt injection, memory poisoning, and policy drift. The learned policy also generalizes to held-out request types and unseen oracle policies.}
+}
+
+@techreport{ieee_7001_2021,
+  author      = {{IEEE Standards Association}},
+  title       = {{IEEE} Standard for Transparency of Autonomous Systems},
+  institution = {Institute of Electrical and Electronics Engineers},
+  type        = {IEEE Standard},
+  number      = {IEEE Std 7001-2021},
+  year        = {2021},
+  doi         = {10.1109/IEEESTD.2021.9451892},
+  url         = {https://ieeexplore.ieee.org/document/9451892},
+  abstract    = {This standard describes measurable, testable levels of transparency for autonomous systems and provides guidance for designing systems that communicate information appropriate to different stakeholders. It addresses transparency for users, the public, incident investigators, expert assessors, and system operators so that autonomous-system decisions, capabilities, limitations, and behavior can be understood and evaluated.}
+}
+
+@techreport{ieee_7009_2024,
+  author      = {{IEEE Standards Association}},
+  title       = {{IEEE} Standard for Fail-Safe Design of Autonomous and Semi-Autonomous Systems},
+  institution = {Institute of Electrical and Electronics Engineers},
+  type        = {IEEE Standard},
+  number      = {IEEE Std 7009-2024},
+  year        = {2024},
+  url         = {https://standards.ieee.org/ieee/7009/7096/},
+  abstract    = {This standard establishes a practical technical baseline of methodologies and tools for developing, implementing, and using effective fail-safe mechanisms in autonomous and semi-autonomous systems. It provides a requirement-based framework, verification criteria, design capabilities, constraints, prerequisites, and system characteristics intended to support robust, transparent, and accountable fail-safe design.}
+}
