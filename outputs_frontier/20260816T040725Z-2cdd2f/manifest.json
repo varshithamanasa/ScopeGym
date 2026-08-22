@@ -1,0 +1,19 @@
+{
+  "agent": "openrouter",
+  "concurrency": 12,
+  "conditions": 24,
+  "created_at": "2026-08-16T04:16:13.672354+00:00",
+  "interpretation": "empirical_hosted_model_study",
+  "models": [
+    "qwen/qwen3.8-27b",
+    "google/gemini-3.7-flash",
+    "deepseek/deepseek-v4-flash-0731",
+    "openai/gpt-5.6-luna"
+  ],
+  "network_scope": "openrouter_api_only",
+  "repetitions": 10,
+  "request_timeout_seconds": 120,
+  "runs": 240,
+  "seed": 20260815,
+  "world_scope": "sealed_symbolic_actions"
+}

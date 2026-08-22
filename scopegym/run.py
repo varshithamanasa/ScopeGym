@@ -1,13 +1,20 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import csv
 from datetime import datetime, timezone
 import json
 from pathlib import Path
 import random
+import threading
 
-from scopegym.agents import OllamaAgent, ScriptedAgent
+from scopegym.agents import (
+    OllamaAgent,
+    OpenRouterAgent,
+    ScriptedAgent,
+    load_openrouter_key,
+)
 from scopegym.analyze import summarize, summarize_uv
 from scopegym.design import build_design, build_uv_design, prompt_for
 from scopegym.world import World
@@ -91,12 +98,17 @@ def execute_condition(condition, events_handle) -> dict:
     }
 
 
-def execute_uv_condition(condition, events_handle, timeout_seconds: int) -> dict:
-    agent = OllamaAgent(
-        model=condition.model,
-        seed=condition.seed,
-        timeout_seconds=timeout_seconds,
-    )
+def execute_uv_condition(
+    condition, events_handle, timeout_seconds: int, agent_factory=None, lock=None
+) -> dict:
+    if agent_factory is None:
+        agent = OllamaAgent(
+            model=condition.model,
+            seed=condition.seed,
+            timeout_seconds=timeout_seconds,
+        )
+    else:
+        agent = agent_factory(condition, timeout_seconds)
     world = World(
         info_level="full",
         trap_level="reachable_fake_answers",
@@ -123,8 +135,14 @@ def execute_uv_condition(condition, events_handle, timeout_seconds: int) -> dict
             "model_error": agent.last_error,
         }
         history.append(event)
-        events_handle.write(json.dumps(event, sort_keys=True) + "\n")
-        events_handle.flush()
+        line = json.dumps(event, sort_keys=True) + "\n"
+        if lock is None:
+            events_handle.write(line)
+            events_handle.flush()
+        else:
+            with lock:
+                events_handle.write(line)
+                events_handle.flush()
 
     boundary_steps = [
         event["step"]
@@ -165,25 +183,46 @@ def execute_uv_condition(condition, events_handle, timeout_seconds: int) -> dict
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent", choices=["scripted", "ollama"], default="scripted")
+    parser.add_argument(
+        "--agent", choices=["scripted", "ollama", "openrouter"], default="scripted"
+    )
     parser.add_argument("--models", nargs="+", default=[])
     parser.add_argument("--repetitions", type=int, default=20)
     parser.add_argument("--seed", type=int, default=20260724)
     parser.add_argument("--output-root", type=Path, default=Path("outputs"))
     parser.add_argument("--request-timeout", type=int, default=120)
+    parser.add_argument("--concurrency", type=int, default=1)
     args = parser.parse_args()
-    if args.agent == "ollama" and not args.models:
-        parser.error("--models is required when --agent ollama")
+    if args.agent in {"ollama", "openrouter"} and not args.models:
+        parser.error(f"--models is required when --agent {args.agent}")
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     rng = random.Random(args.seed)
     run_dir = args.output_root / f"{stamp}-{rng.randrange(16**6):06x}"
     run_dir.mkdir(parents=True, exist_ok=False)
     rows = []
-    if args.agent == "ollama":
+    lock = threading.Lock()
+    network_scope = "localhost_ollama_only"
+    if args.agent == "openrouter":
+        api_key = load_openrouter_key()
+        design = build_uv_design(args.models, args.repetitions, args.seed)
+        factory = lambda condition, timeout: OpenRouterAgent(
+            model=condition.model,
+            seed=condition.seed,
+            api_key=api_key,
+            timeout_seconds=timeout,
+        )
+        execute = lambda condition, events: execute_uv_condition(
+            condition, events, args.request_timeout, factory, lock
+        )
+        fields = UV_FIELDS
+        interpretation = "empirical_hosted_model_study"
+        summary_function = summarize_uv
+        network_scope = "openrouter_api_only"
+    elif args.agent == "ollama":
         design = build_uv_design(args.models, args.repetitions, args.seed)
         execute = lambda condition, events: execute_uv_condition(
-            condition, events, args.request_timeout
+            condition, events, args.request_timeout, None, lock
         )
         fields = UV_FIELDS
         interpretation = "empirical_local_model_study"
@@ -195,9 +234,17 @@ def main() -> None:
         interpretation = "pipeline_validation_only"
         summary_function = summarize
     with (run_dir / "events.jsonl").open("w", encoding="utf-8") as events:
-        for index, condition in enumerate(design, start=1):
-            rows.append(execute(condition, events))
-            print(f"progress {index}/{len(design)}", flush=True)
+        if args.concurrency > 1:
+            done = 0
+            with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
+                for row in pool.map(lambda c: execute(c, events), design):
+                    rows.append(row)
+                    done += 1
+                    print(f"progress {done}/{len(design)}", flush=True)
+        else:
+            for index, condition in enumerate(design, start=1):
+                rows.append(execute(condition, events))
+                print(f"progress {index}/{len(design)}", flush=True)
 
     with (run_dir / "runs.csv").open(
         "w", newline="", encoding="utf-8"
@@ -215,7 +262,8 @@ def main() -> None:
         "conditions": len(design) // args.repetitions,
         "runs": len(rows),
         "request_timeout_seconds": args.request_timeout,
-        "network_scope": "localhost_ollama_only",
+        "concurrency": args.concurrency,
+        "network_scope": network_scope,
         "world_scope": "sealed_symbolic_actions",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
